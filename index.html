@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Stunning Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light blue-grey */
+            color: #334155; /* Slate */
+            overflow-x: hidden; /* Prevent horizontal scroll due to avatar */
+        }
+        .section {
+            padding: 8rem 0;
+            min-height: 100vh; /* Ensure sections are tall enough for scroll effect */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        .section:nth-child(even) {
+            background-color: #e2e8f0; /* Lighter grey for even sections */
+        }
+        .card {
+            background-color: white;
+            border-radius: 1.5rem; /* Rounded corners */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin: 1.5rem;
+            max-width: 90%;
+            width: 100%; /* Make card take full width up to max-width */
+            transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+        }
+        /* Keyframes for the subtle bobbing animation of the avatar */
+        @keyframes bob {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); } /* Subtle up and tilt */
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        #running-avatar {
+            animation: bob 0.8s infinite ease-in-out; /* Apply bobbing animation */
+            transition: transform 0.2s linear; /* Smooth vertical movement and rotation */
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Add shadow to avatar */
+            height: 7rem; /* Adjusted height for your avatar */
+            width: auto; /* Maintain aspect ratio */
+            transform-origin: center center; /* Ensure rotation is from the center */
+        }
+
+        /* Responsive adjustments for avatar size */
+        @media (min-width: 768px) { /* md breakpoint */
+            #running-avatar {
+                height: 8rem; /* Slightly larger on medium screens */
+            }
+        }
+
+        @media (min-width: 1024px) { /* lg breakpoint */
+            #running-avatar {
+                height: 9rem; /* Even larger on large screens */
+            }
+        }
+
+        /* Creative modifications */
+        .card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08); /* More pronounced shadow */
+            transform: translateY(-5px) scale(1.02); /* Lift and slight scale */
+        }
+        .hero-title-glow {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.4); /* White glow */
+        }
+        /* Subtle background animation for hero section */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-gradient {
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Avatar Container - Now runs from top to bottom -->
+    <div id="avatar-container" class="fixed top-0 left-0 z-50 pt-4 pl-4">
+        <!-- Your actual avatar image, assuming you saved it as avatar.png in the 'images' folder -->
+        <img id="running-avatar" src="images/avatar.png" alt="Your AI Avatar Toon Climbing">
+    </div>
+
+    <!-- Hero Section with Profile Picture -->
+    <section id="hero" class="section bg-gradient-to-r from-blue-500 to-indigo-600 text-white animated-gradient">
+        <div class="max-w-6xl w-full px-6 flex flex-col md:flex-row items-center justify-around space-y-8 md:space-y-0 md:space-x-8">
+            <!-- Left Half: Text Content -->
+            <div class="md:w-1/2 text-center md:text-left">
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 animate-pulse hero-title-glow">Hi, I'm [Your Name]</h1>
+                <p class="text-xl md:text-2xl mb-8">A passionate [Your Profession/Field] dedicated to creating impactful solutions.</p>
+                <a href="#about" class="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-100 transition duration-300 transform hover:scale-105">Learn More</a>
+            </div>
+            <!-- Right Half: Profile Picture -->
+            <div class="md:w-1/2 flex justify-center items-center">
+                <!-- Profile picture, assuming you saved it as profile.png in the 'images' folder -->
+                <img src="images/profile.png" alt="Your Profile Picture" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover shadow-2xl transform transition duration-500 hover:scale-105 hover:rotate-3">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="card w-full md:w-3/4 lg:w-2/3">
+            <h2 class="text-4xl font-bold mb-6 text-gray-800">About Me</h2>
+            <p class="text-lg leading-relaxed text-gray-700">
+                I am a highly motivated [Your Profession/Role] with [Number] years of experience in [Your Industry/Area].
+                My expertise lies in [Key Skill 1], [Key Skill 2], and [Key Skill 3]. I thrive in dynamic environments and
+                am always eager to learn and adapt to new technologies and challenges. In my free time, I enjoy [Hobby 1]
+                and [Hobby 2].
+                <br><br>
+                [Add more details about your journey, passions, or a brief anecdote here.]
+            </p>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="card w-full md:w-3/4 lg:w-2/3">
+            <h2 class="text-4xl font-bold mb-6 text-gray-800">My Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 bg-blue-50 rounded-xl shadow-inner transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-3 text-blue-700">Web Development</h3>
+                    <ul class="list-disc list-inside text-left text-gray-600">
+                        <li>HTML5, CSS3, JavaScript</li>
+                        <li>React, Vue.js, Angular</li>
+                        <li>Node.js, Express.js</li>
+                        <li>Tailwind CSS, Bootstrap</li>
+                        <!-- Add more web development skills -->
+                    </ul>
+                </div>
+                <div class="p-6 bg-green-50 rounded-xl shadow-inner transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-3 text-green-700">Programming Languages</h3>
+                    <ul class="list-disc list-inside text-left text-gray-600">
+                        <li>Python</li>
+                        <li>Java</li>
+                        <li>C++</li>
+                        <li>Go</li>
+                        <!-- Add more programming languages -->
+                    </ul>
+                </div>
+                <div class="p-6 bg-purple-50 rounded-xl shadow-inner transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-700">Tools & Technologies</h3>
+                    <ul class="list-disc list-inside text-left text-gray-600">
+                        <li>Git, GitHub</li>
+                        <li>Docker, Kubernetes</li>
+                        <li>AWS, Google Cloud</li>
+                        <li>Database (SQL, NoSQL)</li>
+                        <!-- Add more tools and technologies -->
+                    </ul>
+                </div>
+                <!-- Add more skill categories if needed, following the same structure -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="card w-full md:w-3/4 lg:w-2/3">
+            <h2 class="text-4xl font-bold mb-6 text-gray-800">My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Project 1 Placeholder -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md text-left transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-2 text-blue-800">Project Title 1</h3>
+                    <p class="text-gray-700 mb-4">A brief description of Project 1, highlighting its purpose, technologies used, and your role.</p>
+                    <a href="[Link to Project 1]" class="text-blue-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer">View Project &rarr;</a>
+                </div>
+                <!-- Project 2 Placeholder -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-md text-left transform hover:scale-105 transition duration-300">
+                    <h3 class="text-2xl font-semibold mb-2 text-blue-800">Project Title 2</h3>
+                    <p class="text-gray-700 mb-4">A brief description of Project 2, highlighting its purpose, technologies used, and your role.</p>
+                    <a href="[Link to Project 2]" class="text-blue-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer">View Project &rarr;</a>
+                </div>
+                <!-- Add more project blocks as needed, following the same structure -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section bg-gradient-to-r from-teal-500 to-green-600 text-white">
+        <div class="max-w-xl px-6">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h2>
+            <p class="text-lg md:text-xl mb-8">Have a question or want to work together? Feel free to reach out!</p>
+            <a href="mailto:[your.email@example.com]" class="bg-white text-teal-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-teal-100 transition duration-300 transform hover:scale-105">Email Me</a>
+            <div class="mt-8 text-sm text-gray-200">
+                &copy; 2025 [Your Name]. All rights reserved.
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const avatarContainer = document.getElementById('avatar-container');
+            const avatarImage = document.getElementById('running-avatar'); // Get the image element itself
+
+            // Function to update avatar position and rotation based on scroll
+            const updateAvatarPosition = () => {
+                const scrollY = window.scrollY;
+                const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+                if (documentHeight === 0) {
+                    avatarContainer.style.transform = `translateY(0px) rotateZ(0deg)`; // Reset if no scroll
+                    return;
+                }
+
+                const scrollProgress = Math.min(1, Math.max(0, scrollY / documentHeight));
+
+                // Calculate max movement for the avatar from top of viewport to bottom of viewport
+                // Accounting for the avatar container's padding (pt-4, pl-4)
+                // offsetHeight includes padding and border
+                const avatarContainerHeight = avatarContainer.offsetHeight;
+                const maxTranslateY = window.innerHeight - avatarContainerHeight;
+
+                let translateYValue = scrollProgress * maxTranslateY;
+                let rotateValue = '0deg';
+
+                // Apply rotation when scrolled to the very bottom (or very close)
+                // Using a small threshold (e.g., 0.98 for 98% scrolled)
+                if (scrollProgress > 0.98) {
+                    rotateValue = '90deg';
+                }
+
+                // Apply both translation and rotation
+                avatarContainer.style.transform = `translateY(${translateYValue}px) rotateZ(${rotateValue})`;
+            };
+
+            // Call the function initially and add event listeners
+            updateAvatarPosition();
+            window.addEventListener('scroll', updateAvatarPosition);
+            window.addEventListener('resize', updateAvatarPosition); // Update on resize too
+        });
+    </script>
+</body>
+</html>
