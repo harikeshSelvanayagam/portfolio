@@ -1,0 +1,384 @@
+body {
+    margin: 0;
+    overflow: hidden; /* Prevent default scrollbar as main-content handles it */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    background-color: #0a0a0a; /* Fallback */
+    transition: background-color 1s ease; /* Smooth theme transition */
+}
+
+#kineticCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+/* --- Main Content Container for Scroll Snapping --- */
+.main-content {
+    height: 100vh; /* Make it full viewport height */
+    overflow-y: scroll; /* Enable scrolling for sections */
+    scroll-snap-type: y mandatory; /* Enable vertical scroll snapping */
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+    position: relative;
+    z-index: 1; /* Above canvas */
+}
+
+.portfolio-section {
+    min-height: 100vh; /* Each section takes full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    box-sizing: border-box;
+    scroll-snap-align: start; /* Snap to the top of each section */
+    text-align: center;
+    position: relative; /* For section-content positioning */
+    overflow: hidden; /* Hide reveal-elements initially */
+}
+
+.section-content {
+    max-width: 900px;
+    margin: 0 auto;
+    transition: transform 0.8s ease, opacity 0.8s ease; /* For scene transitions */
+}
+
+/* --- Thematic Changes (Background & Text Color) --- */
+body[data-theme="dark"] {
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+body[data-theme="light"] {
+    background-color: #f0f0f0;
+    color: #333;
+}
+body[data-theme="light"] .reveal-text,
+body[data-theme="light"] .reveal-element,
+body[data-theme="light"] .project-title,
+body[data-theme="light"] .project-overlay h3,
+body[data-theme="light"] .skill-item {
+    color: #333; /* Darker text for light theme */
+    text-shadow: none;
+}
+body[data-theme="light"] .explore-button,
+body[data-theme="light"] .view-details-btn {
+    background: linear-gradient(45deg, #00BFFF, #008CFF); /* Keep buttons vibrant */
+    color: #fff;
+}
+body[data-theme="light"] .draggable-nav-area {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+body[data-theme="light"] .draggable-handle {
+    background-color: rgba(51, 51, 51, 0.6);
+}
+body[data-theme="light"] .nav-item {
+    color: #333;
+}
+body[data-theme="light"] .nav-item:hover {
+    background-color: rgba(0, 191, 255, 0.1);
+}
+body[data-theme="light"] .project-thumbnail {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+body[data-theme="light"] .project-thumbnail:hover {
+    box-shadow: 0 10px 30px rgba(0, 191, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+body[data-theme="light"] .project-overlay {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333;
+}
+
+
+/* --- Revealing Content Animations --- */
+.reveal-text, .reveal-element {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Specific delay for sequential revealing */
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }
+.delay-3 { transition-delay: 0.6s; }
+
+/* When section is active, reveal its content */
+.portfolio-section.active .reveal-text,
+.portfolio-section.active .reveal-element {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+h1, h2 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    color: inherit; /* Inherit color for thematic changes */
+}
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    opacity: 0.8;
+    color: inherit;
+}
+
+.explore-button {
+    background: linear-gradient(45deg, #00bfff, #008cff);
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 5px 20px rgba(0, 191, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.explore-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 191, 255, 0.5);
+}
+
+.explore-button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 15px rgba(0, 191, 255, 0.2);
+}
+
+/* --- Draggable Navigation --- */
+.draggable-nav-area {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    cursor: grab;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.draggable-nav-area:active {
+    cursor: grabbing;
+}
+
+.draggable-handle {
+    width: 30px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: grab;
+}
+
+.nav-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-item {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.2s ease, opacity 0.3s ease, color 0.3s ease;
+    opacity: 0.7;
+}
+
+.nav-item:hover {
+    background-color: rgba(0, 191, 255, 0.3);
+    transform: translateX(-5px);
+    opacity: 1;
+}
+.nav-item.active { /* Highlight active nav item */
+    background-color: rgba(0, 191, 255, 0.5);
+    opacity: 1;
+    transform: translateX(-10px);
+}
+
+/* --- Project Thumbnails (from Kinetic Canvas) --- */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    transform: rotateZ(-0.5deg);
+}
+
+.project-thumbnail {
+    background-color: rgba(20, 20, 20, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    border: 1px solid rgba(0, 191, 255, 0.2);
+}
+
+.project-thumbnail:hover {
+    transform: scale(1.05) translateY(-5px) rotateZ(0.5deg);
+    box-shadow: 0 10px 30px rgba(0, 191, 255, 0.3);
+    background-color: rgba(30, 30, 30, 0.9);
+}
+
+.project-thumbnail img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.3s ease;
+}
+
+.project-thumbnail:hover img {
+    filter: brightness(0.8);
+}
+
+.project-title {
+    padding: 15px;
+    font-size: 1.3em;
+    font-weight: bold;
+    text-align: center;
+    color: #00BFFF;
+    text-shadow: 0 0 5px rgba(0, 191, 255, 0.3);
+    transition: opacity 0.2s; /* For reveal effect */
+}
+
+.project-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    transform: translateY(100%);
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    min-height: 100%;
+}
+
+.project-thumbnail.expanded .project-overlay {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.project-thumbnail.expanded .project-title {
+    opacity: 0;
+}
+
+.project-overlay h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #00BFFF;
+}
+
+.project-overlay p {
+    font-size: 0.95em;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.view-details-btn {
+    background: linear-gradient(45deg, #008cff, #00bfff);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 140, 255, 0.3);
+}
+
+.view-details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 140, 255, 0.5);
+}
+
+/* --- Skill Cloud (Placeholder) --- */
+.skill-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 700px;
+    margin-top: 30px;
+}
+
+.skill-item {
+    background-color: rgba(0, 191, 255, 0.1);
+    border: 1px solid rgba(0, 191, 255, 0.4);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+    cursor: default; /* Will change when interactive */
+    color: #fff; /* Default color for dark theme */
+    text-shadow: 0 0 5px rgba(0, 191, 255, 0.2);
+}
+
+.skill-item:hover {
+    background-color: rgba(0, 191, 255, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5em;
+    }
+    h2 {
+        font-size: 2em;
+    }
+    p {
+        font-size: 1em;
+    }
+
+    .project-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .draggable-nav-area {
+        right: 10px;
+        padding: 5px;
+    }
+    .nav-item {
+        padding: 5px 10px;
+        font-size: 0.9em;
+    }
+
+    .skill-item {
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+}
